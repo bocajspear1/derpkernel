@@ -4,6 +4,12 @@ A derpy kernel made for fun, suffering, learning and a whole bunch of stuff.
 
 Learning lower level stuff!
 
+# Overview
+
+Main kernel files are `dkernel.c` and `dkernel_start.asm`.
+
+Drivers are in the `drivers` folder.
+
 # Sources:
 
 

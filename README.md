@@ -14,3 +14,4 @@ Drivers are in the `drivers` folder.
 
 
 * [Kernel 101 – Let’s write a Kernel](http://arjunsreedharan.org/post/82710718100/kernel-101-lets-write-a-kernel)
+* [Kernel 201 – Let’s write a Kernel with keyboard and screen support](http://arjunsreedharan.org/post/99370248137/kernel-201-lets-write-a-kernel-with-keyboard)

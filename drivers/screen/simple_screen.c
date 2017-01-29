@@ -30,3 +30,17 @@ void write_char(char c, int x, int y) {
     // Write the attribute byte
     VIDPTR[loc+1] = 0x02;
 }
+
+void write_string(const char * out_str, int x, int y) {
+    int loc = 0;
+
+    while (*(out_str+loc) != '\0') {
+        write_char(*(out_str+loc), x, y);
+        x++;
+        if (x > TERM_WIDTH) {
+            x = 0;
+            y++;
+        }
+        loc++;
+    }
+}

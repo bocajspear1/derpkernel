@@ -1,5 +1,5 @@
 .PHONY: all
-all: start drivers kernel link
+all: start drivers info kernel link
 
 .PHONY: start
 start:
@@ -19,6 +19,12 @@ drivers:
 	gcc -m32 -c drivers/screen/simple_screen.c -o obj/simple_screen.o
 	nasm -f elf32 drivers/keyboard/keyboard_handler.asm -o obj/keyboard_handler.o 
 	gcc -m32 -c drivers/keyboard/keyboard_main.c -o obj/keyboard_main.o
+
+.PHONY: info
+info:
+	@echo "\nCompiling info\n"
+	nasm -f elf32 info/reg.asm -o obj/reg.o 
+
 
 .PHONY: link
 link:

@@ -15,5 +15,6 @@ This means we have a grid of 80 X 25
 
 void clear_screen();
 void write_char(char c, int x, int y);
+void write_string(const char * out_str, int x, int y);
 
 #endif

@@ -18,6 +18,7 @@ start:
   call dkmain
   hlt
 
+
 section .bss
 resb 8192
 stack_space:

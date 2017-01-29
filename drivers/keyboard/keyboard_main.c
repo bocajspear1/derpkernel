@@ -12,6 +12,7 @@ void keyboard_add(KEYBOARD_CALLBACK f) {
 }
 
 void keyboard_init() {
+	// Unmask the interrupt for the keyboard
     wportb(PIC1_DAT, 0xFD);
 }
 

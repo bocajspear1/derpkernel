@@ -15,21 +15,45 @@ Main kernel file
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
 
+#define ENTER_KEY_CODE 0x1C
+
+extern int get_mode(void);
+
 uint32_t s_x = 0;
-uint32_t s_y = 1;
+uint32_t s_y = 0;
 
 void write_out(char output) {
-    write_char(output, s_x, s_y);
-    s_x++;
+    if (output == '\n') {
+        s_y++;
+        s_x=0;
+    } else if (output == '\b') {
+        if (s_x > 0) {
+            write_char(' ', s_x--, s_y);
+        } else {
+            write_char(' ', 0, s_y);
+        }
+    } else {
+        write_char(output, s_x, s_y);
+        s_x++;
+    }
+    
+    
 }
 
-void dkmain(void) {
-
+void boot(void) {
+    write_string("Booting...", 0, 0);
     KEYBOARD_CALLBACK kc = (KEYBOARD_CALLBACK)write_out;
     keyboard_add(kc);
     idt_init();
 
-    
+
+}
+
+void dkmain(void) {
+
+    boot();
+
+   
     keyboard_init();
 
     const char *name = "DerpKernel";
@@ -38,6 +62,8 @@ void dkmain(void) {
     // Clear the screen
     clear_screen();
 
+    write_char(get_mode()+0x30, s_x, s_y);
+    s_x++;
 
     // Write out the message
     while(name[i] != '\0') {
@@ -55,6 +81,9 @@ void dkmain(void) {
     s_x++;
     write_char(VERSION_MINOR+48, s_x, s_y);
     s_x++;
+
+    s_y++;
+    s_x = 0;
 
     // DON'T FORGET THIS!!!!!!
 	while(1);

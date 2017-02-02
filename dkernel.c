@@ -9,6 +9,7 @@ Main kernel file
 #include "inttypes.h"
 
 #include "idt/idt.h"
+#include "mem/gdt.h"
 #include "drivers/screen/simple_screen.h"
 #include "drivers/keyboard/keyboard_main.h"
 
@@ -45,7 +46,7 @@ void boot(void) {
     KEYBOARD_CALLBACK kc = (KEYBOARD_CALLBACK)write_out;
     keyboard_add(kc);
     idt_init();
-
+    gdt_init();
 
 }
 

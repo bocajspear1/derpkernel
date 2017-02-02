@@ -11,6 +11,8 @@ kernel: drivers
 	nasm -f elf32 idt/load_idt.asm -o obj/load_idt.o 
 	gcc -m32 -c dkernel.c -o obj/kc.o 
 	gcc -m32 -c idt/idt.c -o obj/idt.o -fno-stack-protector
+	nasm -f elf32 mem/load_gdt.asm -o obj/load_gdt.o 
+	gcc -m32 -c mem/gdt.c -o obj/gdt.o 
 
 .PHONY: drivers
 drivers:
@@ -35,3 +37,11 @@ link:
 clean:
 	rm kernel
 	rm obj/*.o
+
+.PHONY: run
+run:
+	qemu-system-i386 -kernel kernel
+
+.PHONY: debugrun
+debugrun:
+	qemu-system-i386 -kernel kernel -d cpu_reset

@@ -24,7 +24,6 @@ void keyboard_handler_main(void) {
 	/* write EOI */
 	wportb(PIC1_COM, PIB_EOI);
 
-
 	status = rportb(KEYBOARD_STATUS_PORT);
 	/* Lowest bit of status will be set if buffer is not empty */
 	if (status & 0x01) {

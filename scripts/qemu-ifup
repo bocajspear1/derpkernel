@@ -1,0 +1,11 @@
+#!/bin/sh
+
+SWITCH=test0
+
+echo "Creating device $1" >> network.log
+ip tuntap add $1 mode tap user `whoami`
+ip link set $1 up
+sleep 1s
+
+echo "Adding device $1 to switch $SWITCH" >> network.log
+ip link set $1 master $SWITCH

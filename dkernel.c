@@ -10,6 +10,7 @@ Main kernel file
 
 #include "idt/idt.h"
 #include "mem/gdt.h"
+#include "pci/pci.h"
 #include "drivers/screen/simple_screen.h"
 #include "drivers/keyboard/keyboard_main.h"
 
@@ -20,71 +21,58 @@ Main kernel file
 
 extern int get_mode(void);
 
-uint32_t s_x = 0;
-uint32_t s_y = 0;
-
 void write_out(char output) {
     if (output == '\n') {
-        s_y++;
-        s_x=0;
+        newline();
     } else if (output == '\b') {
-        if (s_x > 0) {
-            write_char(' ', s_x--, s_y);
+        if (get_x() > 0) {
+            set_location(get_x()-1, get_y());
+            write_char(' ');
         } else {
-            write_char(' ', 0, s_y);
+            write_char(' ');
         }
     } else {
-        write_char(output, s_x, s_y);
-        s_x++;
+        write_char(output);
     }
-    
-    
 }
 
 void boot(void) {
-    write_string("Booting...", 0, 0);
+    clear_screen();
+    set_location(0,0);
+    write_string("Booting...");
     KEYBOARD_CALLBACK kc = (KEYBOARD_CALLBACK)write_out;
     keyboard_add(kc);
     idt_init();
     gdt_init();
-
+    uint8_t result = pci_enumerate();
+    result += 48;
+    set_location(5,5);
+    write_char(result);
 }
 
 void dkmain(void) {
 
     boot();
-
-   
     keyboard_init();
 
-    const char *name = "DerpKernel";
-    uint32_t i = 0;
+    set_location(0, 1);
+    const char *name = "Welcome to DerpKernel";
+
+    write_string(name);
 
     // Clear the screen
-    clear_screen();
+    // clear_screen();
 
-    write_char(get_mode()+0x30, s_x, s_y);
-    s_x++;
-
-    // Write out the message
-    while(name[i] != '\0') {
-        write_char(name[i], s_x, s_y);
-		i += 1;
-        s_x++;
-	}
+    // write_char(get_mode()+0x30, s_x, s_y);
+    // s_x++;
 
     // Write out the version
-    write_char(' ', s_x, s_y);
-    s_x++;
-    write_char(VERSION_MAJOR+48, s_x, s_y);
-    s_x++;
-    write_char('.', s_x, s_y);
-    s_x++;
-    write_char(VERSION_MINOR+48, s_x, s_y);
-    s_x++;
+    write_char(' ');
+    write_char(VERSION_MAJOR+48);
+    write_char('.');
+    write_char(VERSION_MINOR+48);
 
-    s_y++;
-    s_x = 0;
+    newline();
 
     // DON'T FORGET THIS!!!!!!
 	while(1);
